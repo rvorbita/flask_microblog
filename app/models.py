@@ -1,3 +1,4 @@
+from hashlib import md5
 from app import login
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
@@ -25,6 +26,11 @@ class User(UserMixin, db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+    def avatar(self, size):
+        """Create an Avatar"""
+        digest = md5(self.email.lower().encode('utf-8')).hexdigest()
+        return f"https://www.gravatar.com/avatar/{digest}?d=identicon&s={size}"
 
 
 
